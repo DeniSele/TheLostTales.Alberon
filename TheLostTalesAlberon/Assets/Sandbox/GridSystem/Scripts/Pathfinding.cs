@@ -24,6 +24,9 @@ public class Pathfinding
         if (startCell == null || finishCell == null)
             return null;
 
+        if (startCell.isWalkable == false || finishCell.isWalkable == false)
+            return null;
+
         openList = new SortedList<int, CellData>(new DuplicateKeyComparer<int>())
         {
             { startCell.fCost, startCell }

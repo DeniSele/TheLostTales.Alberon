@@ -31,6 +31,9 @@ public class GridDisplayer : MonoBehaviour
 
     public void DrawPath(List<CellData> path)
     {
+        if (path == null)
+            return;
+
         if (prevPath != null)
             ClearPrevPathCells();
 
