@@ -16,6 +16,7 @@ public class CellData
     }
 
     public bool isWalkable = true;
+    public bool isActionable = false;
 
     public int gCost;
     public int hCost;

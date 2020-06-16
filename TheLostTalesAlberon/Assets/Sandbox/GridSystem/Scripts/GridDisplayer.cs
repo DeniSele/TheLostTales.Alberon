@@ -24,7 +24,10 @@ public class GridDisplayer : MonoBehaviour
                 cells[i, j].transform.parent = gameObject.transform;
 
                 if (!gridManager.GetCellData(i, j).isWalkable)
-                    cells[i, j].GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f);
+                    cells[i, j].GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f, 1f);
+
+                if (gridManager.GetCellData(i, j).isActionable)
+                    cells[i, j].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 0f, 1f);
             }
         }
     }
@@ -49,7 +52,14 @@ public class GridDisplayer : MonoBehaviour
     {
         foreach (CellData cell in prevPath)
         {
-            SelectCell(cell, new Color(1f, 1f, 1f, 0.5f));
+            if (cell.isActionable)
+            {
+                SelectCell(cell, new Color(1f, 1f, 0f, 1f));
+            }
+            else
+            {
+                SelectCell(cell, new Color(1f, 1f, 1f, 0.5f));
+            }
         }
     }
 

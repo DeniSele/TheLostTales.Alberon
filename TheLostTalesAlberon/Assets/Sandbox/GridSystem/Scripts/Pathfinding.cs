@@ -7,14 +7,14 @@ public class Pathfinding
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
-    private GridManager gridManager;
+    private readonly int gridSize;
 
     private SortedList<int, CellData> openList;
-    private List<CellData> closedList;
+    private HashSet<CellData> closedListTest;
 
-    public Pathfinding(GridManager gridManager)
+    public Pathfinding(int gridSize)
     {
-        this.gridManager = gridManager;
+        this.gridSize = gridSize;
     }
 
     public List<CellData> FindPath(int startX, int startY, int finishX, int finishY)
@@ -24,7 +24,7 @@ public class Pathfinding
         if (startCell == null || finishCell == null)
             return null;
 
-        if (startCell.isWalkable == false || finishCell.isWalkable == false)
+        if (!startCell.isWalkable || (!finishCell.isWalkable && !finishCell.isActionable))
             return null;
 
         openList = new SortedList<int, CellData>(new DuplicateKeyComparer<int>())
@@ -32,11 +32,11 @@ public class Pathfinding
             { startCell.fCost, startCell }
         };
 
-        closedList = new List<CellData>();
+        closedListTest = new HashSet<CellData>();
 
-        for (int i = 0; i < gridManager.SIZE; i++)
+        for (int i = 0; i < gridSize; i++)
         {
-            for (int j = 0; j < gridManager.SIZE; j++)
+            for (int j = 0; j < gridSize; j++)
             {
                 CellData cellData = GetCell(i, j);
                 cellData.gCost = int.MaxValue;
@@ -58,15 +58,18 @@ public class Pathfinding
             }
 
             openList.RemoveAt(0);
-            closedList.Add(curCell);
+            closedListTest.Add(curCell);
 
             foreach (CellData cell in GetNeighborList(curCell))
             {
-                if (closedList.Contains(cell)) continue;
+                if (closedListTest.Contains(cell)) continue;
                 if (!cell.isWalkable)
                 {
-                    closedList.Add(cell);
-                    continue;
+                    if (!cell.isActionable || cell != finishCell)
+                    {
+                        closedListTest.Add(cell);
+                        continue;
+                    }
                 }
 
                 int tentativeCost = curCell.gCost + CalculateDistance(curCell, cell);
@@ -98,23 +101,23 @@ public class Pathfinding
         {
             neighborList.Add(GetCell(curCell.X - 1, curCell.Y));
             if (curCell.Y - 1 >= 0) neighborList.Add(GetCell(curCell.X - 1, curCell.Y - 1));
-            if (curCell.Y + 1 < gridManager.SIZE) neighborList.Add(GetCell(curCell.X - 1, curCell.Y + 1));
+            if (curCell.Y + 1 < gridSize) neighborList.Add(GetCell(curCell.X - 1, curCell.Y + 1));
         }
-        if (curCell.X + 1 < gridManager.SIZE)
+        if (curCell.X + 1 < gridSize)
         {
             neighborList.Add(GetCell(curCell.X + 1, curCell.Y));
             if (curCell.Y - 1 >= 0) neighborList.Add(GetCell(curCell.X + 1, curCell.Y - 1));
-            if (curCell.Y + 1 < gridManager.SIZE) neighborList.Add(GetCell(curCell.X + 1, curCell.Y + 1));
+            if (curCell.Y + 1 < gridSize) neighborList.Add(GetCell(curCell.X + 1, curCell.Y + 1));
         }
         if (curCell.Y - 1 >= 0) neighborList.Add(GetCell(curCell.X, curCell.Y - 1));
-        if (curCell.Y + 1 >= 0) neighborList.Add(GetCell(curCell.X, curCell.Y + 1));
+        if (curCell.Y + 1 < gridSize) neighborList.Add(GetCell(curCell.X, curCell.Y + 1));
 
         return neighborList;
     }
 
     private CellData GetCell(int x, int y)
-    {
-        return gridManager.GetCellData(x, y);
+    {    
+        return GridManager.Instance.GetCellData(x, y);
     }
 
     private List<CellData> CalculatePath(CellData finishCell)

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GridManager
   - Wall
+  - ActionObject
   layers:
   - Default
   - TransparentFX
