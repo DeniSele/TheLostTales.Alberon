@@ -94,20 +94,20 @@ public class Pathfinding
     {
         List<CellData> neighborList = new List<CellData>();
 
-        if (curCell.x - 1 >= 0)
+        if (curCell.X - 1 >= 0)
         {
-            neighborList.Add(GetCell(curCell.x - 1, curCell.y));
-            if (curCell.y - 1 >= 0) neighborList.Add(GetCell(curCell.x - 1, curCell.y - 1));
-            if (curCell.y + 1 < gridManager.SIZE) neighborList.Add(GetCell(curCell.x - 1, curCell.y + 1));
+            neighborList.Add(GetCell(curCell.X - 1, curCell.Y));
+            if (curCell.Y - 1 >= 0) neighborList.Add(GetCell(curCell.X - 1, curCell.Y - 1));
+            if (curCell.Y + 1 < gridManager.SIZE) neighborList.Add(GetCell(curCell.X - 1, curCell.Y + 1));
         }
-        if (curCell.x + 1 < gridManager.SIZE)
+        if (curCell.X + 1 < gridManager.SIZE)
         {
-            neighborList.Add(GetCell(curCell.x + 1, curCell.y));
-            if (curCell.y - 1 >= 0) neighborList.Add(GetCell(curCell.x + 1, curCell.y - 1));
-            if (curCell.y + 1 < gridManager.SIZE) neighborList.Add(GetCell(curCell.x + 1, curCell.y + 1));
+            neighborList.Add(GetCell(curCell.X + 1, curCell.Y));
+            if (curCell.Y - 1 >= 0) neighborList.Add(GetCell(curCell.X + 1, curCell.Y - 1));
+            if (curCell.Y + 1 < gridManager.SIZE) neighborList.Add(GetCell(curCell.X + 1, curCell.Y + 1));
         }
-        if (curCell.y - 1 >= 0) neighborList.Add(GetCell(curCell.x, curCell.y - 1));
-        if (curCell.y + 1 >= 0) neighborList.Add(GetCell(curCell.x, curCell.y + 1));
+        if (curCell.Y - 1 >= 0) neighborList.Add(GetCell(curCell.X, curCell.Y - 1));
+        if (curCell.Y + 1 >= 0) neighborList.Add(GetCell(curCell.X, curCell.Y + 1));
 
         return neighborList;
     }
@@ -142,8 +142,8 @@ public class Pathfinding
 
     private int CalculateDistance(CellData a, CellData b)
     {
-        int xDist = Mathf.Abs(a.x - b.x);
-        int yDist = Mathf.Abs(a.y - b.y);
+        int xDist = Mathf.Abs(a.X - b.X);
+        int yDist = Mathf.Abs(a.Y - b.Y);
         int remaining = Mathf.Abs(xDist - yDist);
         return MOVE_DIAGONAL_COST * Mathf.Min(xDist, yDist) + MOVE_STRAIGHT_COST * remaining;
     }

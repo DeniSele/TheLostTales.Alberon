@@ -55,6 +55,6 @@ public class GridDisplayer : MonoBehaviour
 
     private void SelectCell(CellData cell, Color color)
     {
-        cells[cell.x, cell.y].GetComponent<SpriteRenderer>().color = color;
+        cells[cell.X, cell.Y].GetComponent<SpriteRenderer>().color = color;
     }
 }
