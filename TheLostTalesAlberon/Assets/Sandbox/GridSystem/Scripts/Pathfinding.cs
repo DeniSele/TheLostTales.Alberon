@@ -10,7 +10,7 @@ public class Pathfinding
     private readonly int gridSize;
 
     private SortedList<int, CellData> openList;
-    private HashSet<CellData> closedListTest;
+    private HashSet<CellData> closedSet;
 
     public Pathfinding(int gridSize)
     {
@@ -32,7 +32,7 @@ public class Pathfinding
             { startCell.fCost, startCell }
         };
 
-        closedListTest = new HashSet<CellData>();
+        closedSet = new HashSet<CellData>();
 
         for (int i = 0; i < gridSize; i++)
         {
@@ -58,16 +58,16 @@ public class Pathfinding
             }
 
             openList.RemoveAt(0);
-            closedListTest.Add(curCell);
+            closedSet.Add(curCell);
 
             foreach (CellData cell in GetNeighborList(curCell))
             {
-                if (closedListTest.Contains(cell)) continue;
+                if (closedSet.Contains(cell)) continue;
                 if (!cell.isWalkable)
                 {
                     if (!cell.isActionable || cell != finishCell)
                     {
-                        closedListTest.Add(cell);
+                        closedSet.Add(cell);
                         continue;
                     }
                 }
