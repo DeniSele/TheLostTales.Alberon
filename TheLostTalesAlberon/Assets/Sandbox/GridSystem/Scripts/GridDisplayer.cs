@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridDisplayer : MonoBehaviour
+public class GridDisplayer : MonoBehaviour, IDisplayable<List<CellData>>
 {
     public GameObject CellPrefab;
 
     private GameObject[,] cells;
     private List<CellData> prevPath = null;
 
-    public void Init(GridManager gridManager)
+    private bool initialized;
+
+    public void Initialize()
     {
-        int SIZE = gridManager.SIZE;
-        int CELL_SIZE = gridManager.CELL_SIZE;
+        int SIZE = GridManager.Instance.SIZE;
+        int CELL_SIZE = GridManager.Instance.CELL_SIZE;
 
         cells = new GameObject[SIZE, SIZE];
 
@@ -23,17 +25,29 @@ public class GridDisplayer : MonoBehaviour
                 cells[i, j] = Instantiate<GameObject>(CellPrefab, new Vector3(CELL_SIZE * (i + CELL_SIZE * 0.5f), CELL_SIZE * (j + CELL_SIZE * 0.5f), 0), new Quaternion());
                 cells[i, j].transform.parent = gameObject.transform;
 
-                if (!gridManager.GetCellData(i, j).isWalkable)
+                CellData cellData = GridManager.Instance.GetCellData(i, j);
+
+                if (!cellData.isWalkable)
                     cells[i, j].GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f, 1f);
 
-                if (gridManager.GetCellData(i, j).isActionable)
+                if (cellData.isActionable)
                     cells[i, j].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 0f, 1f);
             }
         }
+
+        initialized = true;
     }
 
-    public void DrawPath(List<CellData> path)
+    public void Start()
     {
+        Initialize();
+    }
+
+    public void Display(List<CellData> path)
+    {
+        if (initialized == false)
+            Initialize();
+
         if (path == null)
             return;
 

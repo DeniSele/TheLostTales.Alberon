@@ -7,13 +7,9 @@ public class CellData
     private int x;
     private int y;
 
-    public int X {
-        get { return x; }
-    }
+    public int X => x;
 
-    public int Y {
-        get { return y; }
-    }
+    public int Y => y;
 
     public bool isWalkable = true;
     public bool isActionable = false;

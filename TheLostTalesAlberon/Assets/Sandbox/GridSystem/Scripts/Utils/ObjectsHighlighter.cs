@@ -8,8 +8,9 @@ public class ObjectsHighlighter : MonoBehaviour
 
     [SerializeField] private Color highlightColor;
 
-    [Range(0,1)]
+    [Range(0, 1)]
     [SerializeField] private float opacity = 0.3f;
+
     private void OnDrawGizmos()
     {
         highlightColor.a = 1f;
